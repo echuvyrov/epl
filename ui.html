@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.4/d3.min.js" integrity="sha512-nfUlp2ZWPKWlnAH/OsMeAqRSYBxOdPYeBXwceyw6QqqZ7uTT/s5/eS1hMKphjVBouk0jf/JQ8ULVJRnEqSHkXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>        
+        <!-- add a script that dynamically references an external .js file -->
+        <script>
+            function submitText() {
+                var text = document.getElementById('inputText').value;
+                window.location.href = 'ui.html?prompt=' + encodeURIComponent('text=' + text);
+            }
+            
+            function getPromptFromQueryString() {
+                // Get the URL query string
+                var queryString = window.location.search;
+
+                // Parse the query string parameters into an object
+                var queryParams = {};
+                if (queryString) {
+                    queryString = queryString.substring(1); // Remove the "?" character from the beginning
+                    var paramPairs = queryString.split('&');
+                    for (var i = 0; i < paramPairs.length; i++) {
+                        var pair = paramPairs[i].split('=');
+                        var key = decodeURIComponent(pair[0]);
+                        var value = decodeURIComponent(pair[1] || '');
+                        queryParams[key] = value;
+                    }
+                }
+                
+                console.log('das prompt ' + queryParams['prompt']);
+                // Access the "prompt" parameter value
+                var promptValue = queryParams['prompt'] || 'log hello to console';
+                return promptValue;
+            }
+            
+            // Get the prompt
+            var promptString = getPromptFromQueryString();
+            console.log(prompt);
+            var script = document.createElement('script');
+            // Set the source attribute to the URL of the external JavaScript file
+            script.src = 'http://localhost:8080/my-script.js?prompt=' + promptString;
+            // Add an onload event handler to execute code when the script is loaded
+
+            script.onload = function() {
+                // Code to execute when the external JavaScript file is loaded
+                doStuff();
+            };
+            // Append the script element to the head of the document
+            document.head.appendChild(script);
+
+        </script>
+    </head>
+    <body>
+        <div id = "main">
+
+        </div>
+        <!-- add a large HTML input box at the bottom and centered on the screen with a button next to it-->
+        <!-- create the HTML and the associated CSS with it -->
+        <div id="inputBox">
+            <input type="text" id="inputText" placeholder="What should I create next?">
+            <button id="button" onclick="submitText()">Submit</button>
+        </div>
+    </body>
+
+    <!-- CSS that aligns input box at the bottom and centers it there -->
+    <style>
+        /* center the main div inside the page both horizontally and vertically */
+        #main {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        body {
+            background-color: darkgrey;
+        }
+
+        #inputBox {
+            position: fixed;
+            bottom: 25;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+        /* make the input box and button look nice */
+        #inputText {
+            width: 450px;
+            height: 45px;
+            border-radius: 5px;
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        #button {
+            width: 100px;
+            height: 45px;
+            border-radius: 5px;
+            border: 1px solid black;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+    </style>
+</html>
